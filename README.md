@@ -84,14 +84,22 @@ Sonic853 的 MIT 版权与许可声明保留在源码中，并随 DLL 的 PE 资
 
 仓库不分发原版播放器的背景、按钮或程序图标。基础皮肤使用自绘控件和经典布局。
 
-可选导入工具需要用户自行提供 5.7.9 的 `ttpres.dll` 或对应 `DEFAULT_SKIN_579.skn`，并核验资源 SHA-256；图标还需用户自备原版 `TTPlayer.exe`。
+可选导入工具需要用户自行提供以下文件之一：
+
+- 5.7.9 的 `ttpres.dll`。
+- 对应的 `DEFAULT_SKIN_579.skn`。
+
+导入时核验资源 SHA-256。程序图标另需用户自备原版 `TTPlayer.exe`。
 
 [上游的 5.7.9 资源来源、加载方式与哈希说明](https://github.com/Sonic853/TTPlayer/blob/6c05b21d698dd50515e89cfaf722cd9e223a6e99/docs/SKIN_PROFILE_LOADING.md)
 
 从仓库根目录执行本机导入，例如：
 
 ```powershell
-python skin-contract/cpp/ttplayer/import-classic.py "D:\TTPlayer\ttpres.dll" "dist/cn.audcore.ttplayer-v0.1.13.skin.audcore" "build/声声静听-v0.1.13-本机素材.skin.audcore"
+python skin-contract/cpp/ttplayer/import-classic.py `
+  "D:\TTPlayer\ttpres.dll" `
+  "dist/cn.audcore.ttplayer-v0.1.13.skin.audcore" `
+  "build/声声静听-v0.1.13-本机素材.skin.audcore"
 ```
 
 感谢 Sonic853 公开窗口和皮肤实现，让这些经典交互能够用于新的调音界面。
