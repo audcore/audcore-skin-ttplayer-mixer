@@ -5,7 +5,7 @@
   "kind": "native",
   "author": "17o2r",
   "license": "MIT",
-  "repository": "https://github.com/audcore/audcore-skin-ttplayer",
+  "repository": "https://github.com/audcore/audcore-skin-ttplayer-mixer",
   "api": {
     "major": 0,
     "minor": 2
@@ -44,5 +44,6 @@
     ],
     "output": "build/skin.dll",
     "intermediate": "build/ttplayer-skin/声声静听-v0.1.13.skin.audcore"
-  }
+  },
+  "description": "TTPlayer 风格的主控制、通道列表和效果器三个窗口，支持窗口拖动、吸附与组合移动。"
 }

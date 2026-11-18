@@ -1,67 +1,106 @@
-# 声声静听
+# 声核TTPlayer 三窗口调音台
 
-独立原生皮肤，版本 **0.1.13**，Windows x64，原生 Skin ABI **0.2**。原生皮肤在宿主进程内执行，请只安装可信来源。
+TTPlayer 风格的主控制、通道列表和效果器三个窗口，支持窗口拖动、吸附与组合移动。
 
-![预览](assets/preview.png)
+当前源码版本：**0.1.13**。原生 Windows 界面，适用于 Windows x64 声核。
 
-## 声核与开发
+![布局预览](assets/preview.png)
 
-- [声核官网](https://audcore.utae.cn/) · [下载声核](https://audcore.utae.cn/download/) · [使用指北](https://audcore.utae.cn/guide/)
-- [skin-dev 皮肤开发入口与 SDK](https://audcore.utae.cn/skin-dev/)
-- [皮肤开发与发布规范](https://github.com/audcore/audcore-document/blob/main/docs/皮肤发布规范.md)
-- [皮肤列表](https://github.com/audcore/audcore-document/blob/main/skins.md)
+## 界面与操作
 
-## 独立构建与安装
+- 主窗口控制所选通道的音量与静音，并显示实时左右电平。
+- 通道列表用于选择通道，效果器窗口用于旁通、调参和打开编辑器。
+- 三个窗口可单独拖动，也可贴合后组合移动。
 
-安装 Visual Studio C++ Build Tools（MSVC 19.44.35222、Windows SDK 10.0.26100.0）和 Python。工具版本在 manifest.json 声明；当前是显式脚本 recipe，使用现有低占用、串行构建入口，正式发布仍须人工核对实际工具版本。
+- 界面语言：中文、英文、日文。
+
+## 安装
+
+[先下载声核](https://audcore.utae.cn/download/)
+
+在支持原生皮肤的声核中打开构建生成的 `.skin.audcore` 文件，再到皮肤设置选择「声声静听」。
+
+所需原生接口为 ABI 0.2，皮肤在宿主进程内运行。
+
+公开源码不代表已经更新官方在线版本，下载仍以官方签名列表为准。
+
+## 从源码生成安装包
+
+构建工具：
+
+- MSVC 编译器 **19.44.35222**（VC Tools 14.44.35207）。
+- Windows SDK **10.0.26100.0**。
+- Python **3.14.2**。
 
 ```powershell
-git clone https://github.com/audcore/audcore-skin-ttplayer.git
-cd audcore-skin-ttplayer
+git clone https://github.com/audcore/audcore-skin-ttplayer-mixer.git
+cd audcore-skin-ttplayer-mixer
 powershell -NoProfile -File build.ps1
 ```
 
-最终输出 `dist/cn.audcore.ttplayer-v0.1.13.skin.audcore`，中间产物 `build/skin.dll`。原生 .skin.audcore 本质为 DLL；在声核中打开安装并选用，不直接运行 DLL。本仓库是皮肤的唯一维护来源，不依赖私有源码。源码迁移不代表已更新官方在线目录。
+中间产物为 `build/skin.dll`。最终安装包：
 
-构建遵守全机单项编译锁、BelowNormal 优先级和资源限制；不并行构建其他项目。第三方依赖和许可随源码保留。原版播放器素材不随仓库发布；本机导入工具只处理用户自备且经哈希核对的资源。
+`dist/cn.audcore.ttplayer-v0.1.13.skin.audcore`
 
-## 反馈与许可
+原生安装包本质是 DLL，不是独立运行的播放器或调音程序。构建串行执行，使用 BelowNormal 优先级和资源限制。
 
-[皮肤问题](https://github.com/audcore/audcore-skin-ttplayer/issues) · [声核本体问题](https://github.com/audcore/audcore-document/issues)。自有代码采用 MIT，第三方代码保留各自许可证。
+## 开发与反馈
 
-## 原有使用与测试说明
+- [声核官网](https://audcore.utae.cn/)
+- [声核使用指北](https://audcore.utae.cn/guide/)
+- [skin-dev：SDK、接口资料与模拟开发工具](https://audcore.utae.cn/skin-dev/)
+- [皮肤开发指引](https://github.com/audcore/audcore-document/blob/main/docs/皮肤开发指引.md)
+- [manifest 与构建发布规范](https://github.com/audcore/audcore-document/blob/main/docs/皮肤发布规范.md)
+- [所有皮肤的源码列表](https://github.com/audcore/audcore-document/blob/main/skins.md)
+- [此皮肤的问题反馈](https://github.com/audcore/audcore-skin-ttplayer-mixer/issues)
+- [声核本体的问题反馈](https://github.com/audcore/audcore-document/issues)
 
-# 声声静听 v0.1.13
+修改名称、版本、语言或构建规则时编辑根目录 manifest.json；界面源码和资源按清单维护。每款皮肤只在自己的仓库更新，构建输入无变化时跳过。
 
-在支持原生皮肤 ABI 0.2 的 x64 声核中打开 `声声静听-v0.1.13.skin.audcore` 安装并选用。三个窗口在 100% Windows 显示比例下分别为 327 × 141、327 × 99 和 327 × 188 像素。
+## TTPlayer 参考来源
 
-- 每次打开主窗或从最小化恢复时优先选中可见的 Mic 或麦克风通道，也识别未命名的 🎙️ 通道。主窗显示所选通道的名称和无底框的实时左右声道电平，长名称会自动横向滚动，音量与静音作用于该通道。播放与停止继续控制宿主传输。
-- 原播放列表同时显示八行，按固定列显示通道名、精简输入名（未接入时留白）、增益（dB）、效果器数量（FX）和状态。M、S、R 分别表示静音、独奏和录音。点击行或按上下键选中通道，右键行打开该通道菜单。通道列表按钮或 F3 切换窗口显示，F4 打开并聚焦列表。
-- 原均衡器显示所选通道的效果器。效果器按钮或 F2 切换窗口显示。顶部旁通切换整条效果链，删除作用于选中的效果器，新建打开效果器选择。点击行首圆点切换单个效果器旁通，双击名称打开编辑器，在数值上滚动可调整主参数或干湿比。行末 ⋯ 或右键打开效果器菜单。
-- 拖动主窗的空白区域，已贴合的面板一起移动。拖动辅助窗的标题区域可单独移动，靠近其他窗或屏幕工作区边缘时自动吸附。
-- 播放窗口的打开按钮打开声核工程，F10 或右键主窗空白区打开共用的原生主菜单。原音量条可拖动，底部 −60 dB，顶部 0 dB。前后曲仍显示停用状态。
-- 三个窗口默认 5% 透明。Shift + 滚轮或 F6 / Shift + F6 以 5% 步进调整，范围 0–90%。设置作用于当前皮肤会话。
+参考项目为 Sonic853 的 TTPlayer 社区复刻版，固定使用以下提交：
 
-## 本机导入 5.7.9 原版位图
+[Sonic853/TTPlayer · 6c05b21](https://github.com/Sonic853/TTPlayer/tree/6c05b21d698dd50515e89cfaf722cd9e223a6e99)
 
-基础单文件使用自绘控件和经典布局。原版背景、按钮与 LED 位图来自 TT.experience 的原始资源。本机导入时把它们写入新皮肤文件的 PE 资源段。两个版本使用同一皮肤 ID，安装导入后的单文件会更新已安装的基础版。
+本皮肤将经典播放器的三个窗口用于声核的主控制、通道列表和效果器操作。它不是音乐播放器，音频处理仍由声核完成。
+
+### 移植与适配范围
+
+- `window_drag.cpp/.h`：移植窗口拖动、贴合与组合移动的 Win32 几何实现。
+- `button_state.hpp`：提取自上游 `include/ttplayer/skin/skin_button.h` 的按钮状态处理。
+- `classic_art.hpp`：适配上游 `player_window.cpp` 的帧绘制方式。
+- 窗口布局另参考 `player_window_equalizer.cpp`、`player_window_visual.cpp` 和 `player_window_playlist.cpp`。
+- 窗口与皮肤加载另参考 `player_window_internal.h`、`src/skin/skin.cpp` 和 `src/skin/skin_image.cpp`。
+
+### 版权与许可证
+
+Sonic853 的 MIT 版权与许可声明保留在源码中，并随 DLL 的 PE 资源交付。
+
+- [本仓库保留的 Sonic853 MIT 许可](skin-contract/cpp/ttplayer/LICENSE-Sonic853.txt)
+- [固定提交中的上游 LICENSE](https://github.com/Sonic853/TTPlayer/blob/6c05b21d698dd50515e89cfaf722cd9e223a6e99/LICENSE)
+
+### 原版美术资源
+
+仓库不分发原版播放器的背景、按钮或程序图标。基础皮肤使用自绘控件和经典布局。
+
+可选导入工具需要用户自行提供 5.7.9 的 `ttpres.dll` 或对应 `DEFAULT_SKIN_579.skn`，并核验资源 SHA-256；图标还需用户自备原版 `TTPlayer.exe`。
+
+[上游的 5.7.9 资源来源、加载方式与哈希说明](https://github.com/Sonic853/TTPlayer/blob/6c05b21d698dd50515e89cfaf722cd9e223a6e99/docs/SKIN_PROFILE_LOADING.md)
+
+从仓库根目录执行本机导入，例如：
 
 ```powershell
-python skin-contract/cpp/ttplayer/import-classic.py "D:\TTPlayer\ttpres.dll" "build\ttplayer-skin\声声静听-v0.1.13.skin.audcore" "build\ttplayer-skin\声声静听-v0.1.13-本机原版素材.skin.audcore"
+python skin-contract/cpp/ttplayer/import-classic.py "D:\TTPlayer\ttpres.dll" "dist/cn.audcore.ttplayer-v0.1.13.skin.audcore" "build/声声静听-v0.1.13-本机素材.skin.audcore"
 ```
 
-也可提供相同的 `DEFAULT_SKIN_579.skn`。脚本只读取原文件数据并核对默认皮肤 ZIP 的 SHA-256，生成的新单文件可直接安装。所导入的背景和四态帧在 100% DPI 使用原始像素和色键。通道、电平、效果器内容和宿主状态文字由声核重绘，原播放器的歌曲信息和进度条未复刻。原版程序图标显示在主窗左上角，并设为主窗的大小窗口图标。导入脚本会读取素材同目录的 5.7.9 `TTPlayer.exe`，也可用 `--icon-source <路径>` 指定。图标取自原版程序资源组 128，核验整组 SHA-256 后嵌入本机单文件。
+感谢 Sonic853 公开窗口和皮肤实现，让这些经典交互能够用于新的调音界面。
 
-## 源码与验证
+## 许可证与验证范围
 
-固定上游为 [Sonic853/TTPlayer 6c05b21d698dd50515e89cfaf722cd9e223a6e99](https://github.com/Sonic853/TTPlayer/tree/6c05b21d698dd50515e89cfaf722cd9e223a6e99)。`window_drag.cpp/.h` 移植自同名 Win32 几何实现，`button_state.hpp` 提取自 `include/ttplayer/skin/skin_button.h`，`classic_art.hpp` 适配 `player_window.cpp` 的帧绘制。参考了 `player_window_equalizer.cpp`、`player_window_visual.cpp`、`player_window_playlist.cpp`、`player_window_internal.h`、`src/skin/skin.cpp` 及 `src/skin/skin_image.cpp`。完整 Sonic853 MIT 许可嵌入皮肤 PE 资源。原版美术资源来自上游文档标明的 `ttpres.dll` → `ZIP/<DEFAULT_SKIN>`，只供本机导入。 [上游许可](https://github.com/Sonic853/TTPlayer/blob/6c05b21d698dd50515e89cfaf722cd9e223a6e99/LICENSE) · [5.7.9 资源来源与哈希](https://github.com/Sonic853/TTPlayer/blob/6c05b21d698dd50515e89cfaf722cd9e223a6e99/docs/SKIN_PROFILE_LOADING.md)
+自有代码采用 [MIT 许可证](LICENSE)。系统字体只按名称引用，不随包分发。
 
-```powershell
-python skin-contract/cpp/ttplayer/build.py --tests
-build/ttplayer-skin/ttplayer-test.exe <基础单文件的绝对路径> <本机导入单文件的绝对路径>
-```
-
-构建持有全机直播编译锁，编译与链接串行，使用 BelowNormal 优先级及 1.5 GiB Job 提交内存硬上限。无窗口测试检查 ABI 重载、订阅释放、命令与状态、组合移动、拆分、吸附阈值和 DPI 几何。测试用实际 DLL 入口加载位图，再逐像素比较离屏渲染和原版 BMP，覆盖原色及色键。实际鼠标拖动、跨屏和声核内安装交互尚未实测。
-
-
-已用声明的 MSVC、Windows SDK 和 Python 独立编译，并通过最终 PE 产物检查。未进行真实宿主窗口验收。
+- JSON 解析库保留 [nlohmann/json 的原始许可](tools/mixer-console/vendor/LICENSE.json)。
+- 已使用上述工具链独立编译，并通过最终 PE 产物检查。
+- 本轮仓库改名与说明整理没有重新编译或替换在线皮肤包。
+- 未重新启动宿主进行窗口、鼠标交互或跨屏验收。
